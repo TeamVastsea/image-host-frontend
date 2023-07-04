@@ -1,6 +1,13 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Center, Box, useColorModeValue, Icon, Text } from "@chakra-ui/react";
+import {
+  Center,
+  Box,
+  useColorModeValue,
+  Icon,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { AiFillFileAdd } from "react-icons/ai";
 
 export default function Dropzone({ onFileAccepted }) {
@@ -20,9 +27,7 @@ export default function Dropzone({ onFileAccepted }) {
     multiple: false,
   });
 
-  const dropText = isDragActive
-    ? "松开鼠标开始上传"
-    : "将图片文件拖动到这里, 或者点击这里选择文件";
+  const dropText = isDragActive ? "松开鼠标开始上传" : "拖拽图片到此处或点击";
 
   const activeBg = useColorModeValue("gray.100", "gray.600");
   const borderColor = useColorModeValue(
@@ -32,7 +37,7 @@ export default function Dropzone({ onFileAccepted }) {
 
   return (
     <Box
-      p={10}
+      p={5}
       height={200}
       cursor="pointer"
       bg={isDragActive ? activeBg : "transparent"}
@@ -41,12 +46,13 @@ export default function Dropzone({ onFileAccepted }) {
       borderRadius={4}
       border="3px dashed"
       borderColor={borderColor}
-      textAlign="center"
       {...getRootProps()}
     >
-      <input {...getInputProps()} />
-      <Icon as={AiFillFileAdd} fontSize="50" />
-      <Text mt="2">{dropText}</Text>
+      <VStack justify="center" h="full">
+        <input {...getInputProps()} />
+        <Icon as={AiFillFileAdd} fontSize="50" />
+        <Text mt="2">{dropText}</Text>
+      </VStack>
     </Box>
   );
 }

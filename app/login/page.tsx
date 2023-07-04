@@ -9,12 +9,13 @@ import {
   Button,
   Alert,
   AlertIcon,
-  AlertTitle,
   AlertDescription,
   Collapse,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+import { checkUsername } from "../api";
 
 export default function Login() {
   const [isLoading, setIsloading] = useState(false);
@@ -36,9 +37,7 @@ export default function Login() {
       return;
     }
 
-    // Some API requests
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    if (username !== "test") {
+    if (!checkUsername(username)) {
       setError("玩家不存在");
       setIsloading(false);
       return;
