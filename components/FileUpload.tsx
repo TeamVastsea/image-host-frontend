@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import {
-  Center,
   Box,
   useColorModeValue,
   Icon,

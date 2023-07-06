@@ -3,15 +3,15 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  return (
-    <html>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
+    return (
+        <html>
+        <body>
+            <Providers>{children}</Providers>
+        </body>
     </html>
-  );
+    );
 }
