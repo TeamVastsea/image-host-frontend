@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 from pydantic import BaseModel
+import requests
 
 app = FastAPI()
 
@@ -33,9 +34,19 @@ mongo_client = MongoClient(DB_URL)
 db = mongo_client["mc_lp"]
 
 
-@app.get("/{user}/")
-async def check_user(user: str) -> bool:
-    return db.users.find_one({"name": user.lower()}) != None
+@app.get("/{code}/")
+async def check_auth_code(code: str) -> bool:
+    resp = requests.get(BACKEND_BASE + "/users?code=" + code)
+    return resp.ok
+
+
+@app.get("/{code}/name")
+async def get_player_name(code: str) -> str:
+    resp = requests.get(BACKEND_BASE + "/users?code=" + code)
+    try:
+        return resp.json()["display_name"]
+    except:
+        raise HTTPException(status_code=400)
 
 
 class Image(BaseModel):
@@ -51,7 +62,7 @@ class Image(BaseModel):
 
 @app.get("/{user}/images")
 async def get_user_images(user: str) -> List[Image]:
-    if not await check_user(user):
+    if not await check_auth_code(user):
         raise HTTPException(status_code=404)
 
     objs = client.list_objects(Bucket=BUCKET, Prefix=user)
@@ -68,7 +79,7 @@ async def get_user_images(user: str) -> List[Image]:
 
 @app.post("/{user}/images")
 async def upload_image(user: str, file: UploadFile) -> Image:
-    if not await check_user(user):
+    if not await check_auth_code(user):
         raise HTTPException(status_code=404)
 
     id = str(uuid.uuid4())
@@ -82,7 +93,7 @@ async def upload_image(user: str, file: UploadFile) -> Image:
 
 @app.delete("/{user}/images/{id}")
 async def delete_image(user: str, id: str):
-    if not await check_user(user):
+    if not await check_auth_code(user):
         raise HTTPException(status_code=404)
 
     resp = client.delete_object(Bucket=BUCKET, Key=user + "/" + id)

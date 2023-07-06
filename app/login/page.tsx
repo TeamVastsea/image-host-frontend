@@ -28,7 +28,7 @@ export default function Login() {
 
     setIsloading(true);
     if (username.length < 3) {
-      setError("玩家ID长度至少为3");
+      setError("Auth Code 长度不足");
 
       setTimeout(() => {
         setIsloading(false);
@@ -37,7 +37,7 @@ export default function Login() {
       return;
     }
     if (!(await checkUsername(username))) {
-      setError("玩家不存在");
+      setError("Auth Code 无效");
       setIsloading(false);
       return;
     }
@@ -61,7 +61,7 @@ export default function Login() {
 
           <Input
             my="5"
-            placeholder="玩家ID"
+            placeholder="Auth Code"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={(e) => {

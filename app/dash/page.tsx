@@ -28,13 +28,14 @@ import {
 import { SunIcon, MoonIcon, CopyIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 import FileUpload from "@/components/FileUpload";
 import { useEffect, useState } from "react";
-import { getUserImages, Image as IImage, upload, deleteImage } from "../api";
+import { getUserImages, Image as IImage, upload, deleteImage, getPlayerName } from "../api";
 
 export default function Dashboard() {
   const router = useRouter();
   const { colorMode, toggleColorMode } = useColorMode();
 
   const [username, setUsername] = useState("");
+  const [playerName, setPlayername] = useState("")
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<IImage[]>([]);
 
@@ -44,6 +45,9 @@ export default function Dashboard() {
       return;
     }
     setUsername(localStorage.getItem("username")!);
+    getPlayerName(localStorage.getItem("username")!).then((res) => {
+      setPlayername(res);
+    })
     getUserImages(localStorage.getItem("username")!).then((res) => {
       console.log(res);
       setImages(res);
@@ -122,7 +126,7 @@ export default function Dashboard() {
         <Card p="15" m="auto" maxW={"1500"}>
           <CardHeader>
             <HStack justify={"space-between"}>
-              <Heading size="md">{username}, 您好！</Heading>
+              <Heading size="md">{playerName}, 您好！</Heading>
               <HStack>
                 <IconButton
                   aria-label="Color Scheme"
