@@ -22,12 +22,13 @@ import {
   Link,
   Button,
   Skeleton,
+  useToast,
 } from "@chakra-ui/react";
 
-import { SunIcon, MoonIcon, CopyIcon, CheckIcon } from "@chakra-ui/icons";
+import { SunIcon, MoonIcon, CopyIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 import FileUpload from "@/components/FileUpload";
 import { useEffect, useState } from "react";
-import { getUserImages, Image as IImage } from "../api";
+import { getUserImages, Image as IImage, upload, deleteImage } from "../api";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -36,20 +37,38 @@ export default function Dashboard() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<IImage[]>([]);
+
   useEffect(() => {
     if (!localStorage.getItem("username")) {
       router.push("/login");
       return;
     }
     setUsername(localStorage.getItem("username")!);
-    getUserImages(username).then((res) => {
-      setLoading(false);
+    getUserImages(localStorage.getItem("username")!).then((res) => {
+      console.log(res);
       setImages(res);
+      setLoading(false);
     });
-  });
+  }, []);
 
-  function upload(file: any) {
+  const toast = useToast();
+
+  function onFileAccepted(file: any) {
+    const t = toast({
+      position: "top",
+      status: "loading",
+      title: "正在上传图片",
+    });
     console.log(file);
+    upload(file, username)
+      .then((res) => {
+        setImages([res].concat(images));
+        toast.update(t, { status: "success", description: "上传成功" });
+        setTimeout(() => toast.close(t), 1000);
+      }, (err) => {
+        console.log(err);
+        toast.update(t, { status: "error", description: "上传失败" })
+      });
   }
 
   function exit() {
@@ -76,6 +95,27 @@ export default function Dashboard() {
     }, 2000);
   }
 
+  function doDeleteImage() {
+    const t = toast({
+      position: "top",
+      status: "loading",
+      title: "正在删除图片",
+    });
+
+    deleteImage(username, currentImage!.id)
+      .then((res) => {
+        setImages(images.filter((image) => image.id !== currentImage!.id));
+
+        toast.update(t, { status: "success", description: "图片删除成功！" });
+        setTimeout(() => toast.close(t), 1000);
+
+        setModalOpen(false)
+      }, (err) => {
+        console.log(err);
+        toast.update(t, { status: "error", description: "图片删除失败！" });
+      });
+  }
+
   return (
     <Box p="10">
       <Skeleton isLoaded={!loading}>
@@ -97,10 +137,11 @@ export default function Dashboard() {
           </CardHeader>
           <CardBody>
             <SimpleGrid columns={{ xl: 4, sm: 2, md: 3 }} spacing={10}>
-              <FileUpload onFileAccepted={upload} />
+              <FileUpload onFileAccepted={onFileAccepted} />
 
               {images.map((image) => (
                 <Image
+                  key={image.id}
                   w="full"
                   height={200}
                   objectFit={"cover"}
@@ -109,7 +150,6 @@ export default function Dashboard() {
                     setModalOpen(true);
                     setCurrentImage(image);
                   }}
-                  fallbackSrc="https://via.placeholder.com/150"
                 />
               ))}
             </SimpleGrid>
@@ -129,20 +169,30 @@ export default function Dashboard() {
             <HStack mt="4">
               <Text>图片链接：</Text>
               <Link
+                flex="1"
                 color="blue.500"
                 isExternal
                 href={currentImage?.original}
                 target="_blank"
+                textOverflow="ellipsis"
+                overflow="hidden"
+                whiteSpace="nowrap"
               >
                 {currentImage?.original}
               </Link>
 
-              <Box flex="1" />
               <IconButton
                 aria-label="copy"
                 onClick={copy}
                 color={copied ? "green.400" : ""}
                 icon={copied ? <CheckIcon /> : <CopyIcon />}
+              />
+
+              <IconButton
+                aria-label="delete"
+                onClick={doDeleteImage}
+                color={"red.400"}
+                icon={<DeleteIcon />}
               />
             </HStack>
           </ModalBody>

@@ -1,4 +1,4 @@
-// app/layout.tsx
+"use client"
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -8,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html>
       <body>
         <Providers>{children}</Providers>
       </body>

@@ -10,12 +10,17 @@ import {
 } from "@chakra-ui/react";
 import { AiFillFileAdd } from "react-icons/ai";
 
-export default function Dropzone({ onFileAccepted }) {
+interface Props {
+  onFileAccepted: (file: globalThis.File) => void;
+}
+
+export default function Dropzone(props: Props) {
+  const { onFileAccepted } = props;
   const onDrop = useCallback(
-    (acceptedFiles) => {
+    (acceptedFiles: globalThis.File[]) => {
       onFileAccepted(acceptedFiles[0]);
     },
-    [onFileAccepted]
+    [onFileAccepted],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -32,7 +37,7 @@ export default function Dropzone({ onFileAccepted }) {
   const activeBg = useColorModeValue("gray.100", "gray.600");
   const borderColor = useColorModeValue(
     isDragActive ? "teal.300" : "gray.300",
-    isDragActive ? "teal.500" : "gray.500"
+    isDragActive ? "teal.500" : "gray.500",
   );
 
   return (

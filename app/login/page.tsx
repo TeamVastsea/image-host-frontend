@@ -36,8 +36,7 @@ export default function Login() {
 
       return;
     }
-
-    if (!checkUsername(username)) {
+    if (!(await checkUsername(username))) {
       setError("玩家不存在");
       setIsloading(false);
       return;
