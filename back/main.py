@@ -35,7 +35,7 @@ db = mongo_client["mc_lp"]
 
 @app.get("/{user}/")
 async def check_user(user: str) -> bool:
-    return db.users.find_one({"name": user}) != None
+    return db.users.find_one({"name": user.lower()}) != None
 
 
 class Image(BaseModel):
