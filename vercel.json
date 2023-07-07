@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "http://main.vastsea.cc:9528/:match*"
+    }
+  ]
+}

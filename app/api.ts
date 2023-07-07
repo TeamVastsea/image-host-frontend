@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000/";
+const API_BASE = "https://image.vastsea.cc/api/";
 
 export interface Image {
     id: string;
@@ -17,7 +17,6 @@ export async function checkUsername(username: string): Promise<boolean> {
 export async function getPlayerName(username: string): Promise<string> {
     return await (await fetch(API_BASE + username + "/name")).json();
 }
-
 
 export async function upload(
     file: globalThis.File,
