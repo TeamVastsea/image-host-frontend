@@ -30,7 +30,7 @@ export default function Login() {
   function goMicrosoft() {
     const current = window.location.href;
     location.href =
-      "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=a9924c31-f355-4fe9-a7e5-bd72e140d820&response_type=code&redirect_uri=" +
+      "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=646004c1-0054-4157-b5b5-4cb89f6eaa1a&response_type=code&redirect_uri=" +
       encodeURIComponent(current) +
       "&scope=XboxLive.signin%20offline_access%20openid%20email&prompt=select_account&response_mode=fragment";
   }
