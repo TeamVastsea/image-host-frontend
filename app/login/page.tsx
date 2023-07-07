@@ -35,7 +35,7 @@ export default function Login() {
       "&scope=XboxLive.signin%20offline_access%20openid%20email&prompt=select_account&response_mode=fragment";
   }
 
-  async function login(_code: string | undefined) {
+  async function login(_code: string | undefined = undefined) {
     if (isLoading) return;
 
     let code;
