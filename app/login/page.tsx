@@ -129,7 +129,7 @@ export default function Login() {
             w="full"
             colorScheme="blue"
             isLoading={isLoading}
-            onClick={login}
+            onClick={() => login()}
           >
             继续
           </Button>
