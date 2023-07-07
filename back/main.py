@@ -9,7 +9,7 @@ from qcloud_cos import CosS3Client
 from pydantic import BaseModel
 import requests
 
-app = FastAPI()
+app = FastAPI(redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,
