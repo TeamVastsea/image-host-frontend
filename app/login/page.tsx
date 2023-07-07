@@ -31,7 +31,7 @@ export default function Login() {
     const current = window.location.href;
     location.href =
       "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=646004c1-0054-4157-b5b5-4cb89f6eaa1a&response_type=code&redirect_uri=" +
-      encodeURIComponent(current) +
+      "https://image.vastsea.cc/login" +
       "&scope=XboxLive.signin%20offline_access%20openid%20email&prompt=select_account&response_mode=fragment";
   }
 
