@@ -49,7 +49,7 @@ const useAuthStore = create<
       isLoading: false,
       error: null,
 
-      // 登录 - 目前是模拟实现，后续接入真实API
+      // 登录 - 目前是模拟实现, 后续接入真实API
       login: async (credentials) => {
         set({ isLoading: true, error: null });
 
@@ -58,7 +58,7 @@ const useAuthStore = create<
           await new Promise(resolve => setTimeout(resolve, 1000));
 
           // 模拟成功登录
-          // 注意：这里只是示例，实际应该调用真实的登录API
+          // 注意：这里只是示例, 实际应该调用真实的登录API
           const mockUser: User = {
             id: '1',
             username: credentials.username,

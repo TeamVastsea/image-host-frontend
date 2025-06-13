@@ -56,7 +56,7 @@ const useStagingStore = create<StagingState>((set, get) => ({
     const newImages = files.map(file => {
       // 创建预览URL
       const previewUrl = URL.createObjectURL(file);
-      
+
       return {
         id: generateId(),
         file,
@@ -76,12 +76,12 @@ const useStagingStore = create<StagingState>((set, get) => ({
     set((state) => {
       // 找到要删除的图片
       const imageToRemove = state.images.find(img => img.id === id);
-      
-      // 如果找到了图片，释放预览URL
+
+      // 如果找到了图片, 释放预览URL
       if (imageToRemove) {
         URL.revokeObjectURL(imageToRemove.previewUrl);
       }
-      
+
       return {
         images: state.images.filter((image) => image.id !== id),
       };
@@ -94,7 +94,7 @@ const useStagingStore = create<StagingState>((set, get) => ({
     get().images.forEach(image => {
       URL.revokeObjectURL(image.previewUrl);
     });
-    
+
     set({ images: [] });
   },
 

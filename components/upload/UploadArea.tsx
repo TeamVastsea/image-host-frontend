@@ -40,9 +40,9 @@ export default function UploadArea() {
   } = useImageUpload({
     ...uploadOptions,
     onDropCallback: (files) => {
-      // 当文件被拖放时，添加到暂存区而不是上传
+      // 当文件被拖放时, 添加到暂存区而不是上传
       addImages(files);
-      // 返回空对象，阻止默认上传行为
+      // 返回空对象, 阻止默认上传行为
       return { preventUpload: true };
     }
   });
@@ -144,7 +144,7 @@ export default function UploadArea() {
                       <span className="font-medium">点击上传</span> 或拖放图片到此处
                     </p>
                     <p className="text-xs text-muted-foreground text-center">
-                      支持 PNG, JPG, GIF, WEBP, SVG 等格式，单个文件最大 10MB
+                      支持 PNG, JPG, GIF, WEBP, SVG 等格式, 单个文件最大 10MB
                     </p>
                   </>
                 )}

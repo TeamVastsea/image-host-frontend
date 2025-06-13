@@ -9,22 +9,22 @@ export default function Home() {
     {
       icon: <Upload className="h-8 w-8 text-primary" />,
       title: '多种上传方式',
-      description: '支持拖拽上传、粘贴上传、URL上传等多种方式，满足不同场景需求。',
+      description: '支持拖拽上传、粘贴上传、URL上传等多种方式, 满足不同场景需求。',
     },
     {
       icon: <ImageIcon className="h-8 w-8 text-primary" />,
       title: '图片管理',
-      description: '提供图片分类、搜索、删除等功能，轻松管理您的图片资源。',
+      description: '提供图片分类、搜索、删除等功能, 轻松管理您的图片资源。',
     },
     {
       icon: <Link2 className="h-8 w-8 text-primary" />,
       title: '多格式链接',
-      description: '支持生成HTML、Markdown、BBCode等多种格式的图片链接，方便在不同平台使用。',
+      description: '支持生成HTML、Markdown、BBCode等多种格式的图片链接, 方便在不同平台使用。',
     },
     {
       icon: <Shield className="h-8 w-8 text-primary" />,
       title: '隐私保护',
-      description: '自动移除图片EXIF信息，保护您的隐私安全。',
+      description: '自动移除图片EXIF信息, 保护您的隐私安全。',
     },
   ];
 
@@ -36,7 +36,7 @@ export default function Home() {
           简单、高效的图片托管服务
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          快速上传、管理和分享您的图片，支持多种上传方式和链接格式，让图片分享变得更加简单。
+          快速上传、管理和分享您的图片, 支持多种上传方式和链接格式, 让图片分享变得更加简单。
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <Button size="lg" asChild>
@@ -74,8 +74,8 @@ export default function Home() {
       {/* 使用流程 */}
       <section className="bg-muted/50 py-12 rounded-lg">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold">简单三步，开始使用</h2>
-          <p className="text-muted-foreground mt-2">快速上手，轻松分享</p>
+          <h2 className="text-3xl font-bold">简单三步, 开始使用</h2>
+          <p className="text-muted-foreground mt-2">快速上手, 轻松分享</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           <div className="text-center space-y-2">
@@ -100,7 +100,7 @@ export default function Home() {
       <section className="text-center py-12">
         <h2 className="text-3xl font-bold mb-4">立即开始使用</h2>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-          免费注册，开始享受便捷的图片托管服务
+          免费注册, 开始享受便捷的图片托管服务
         </p>
         <Button size="lg" asChild>
           <Link href="/upload">开始上传</Link>

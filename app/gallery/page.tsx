@@ -1,7 +1,7 @@
 import ImageGallery from '@/components/gallery/ImageGallery';
 
 export const metadata = {
-  title: '图片库 - 图床',
+  title: '图片库 - 图床 | 瀚海工艺',
   description: '查看和管理您上传的所有图片',
 };
 

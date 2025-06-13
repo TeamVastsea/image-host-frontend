@@ -47,7 +47,7 @@ const useImageStore = create(
 
       // 添加图片
       addImage: (image) => {
-        // 使用传入的 id（如果存在），否则生成新的 id
+        // 使用传入的 id（如果存在）, 否则生成新的 id
         const newImage: ImageInfo = {
           ...image,
           id: image.id || generateId(),

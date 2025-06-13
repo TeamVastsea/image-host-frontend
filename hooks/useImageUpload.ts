@@ -78,7 +78,7 @@ export default function useImageUpload(defaultOptions?: UploadOptions): UseImage
         url: result.url,
         thumbnailUrl: result.thumbnailUrl,
         filename: file.name,
-        // 如果提供了自定义名称，则使用它
+        // 如果提供了自定义名称, 则使用它
         customName: options?.metadata?.customName || '',
         size: file.size,
         uploadTime: Date.now(),
@@ -121,20 +121,20 @@ export default function useImageUpload(defaultOptions?: UploadOptions): UseImage
       results.forEach((result, index) => {
         const file = files[index];
         let customName = '';
-        
+
         // 确定自定义名称
         if (options?.metadata?.customNames && typeof options.metadata.customNames === 'object') {
-          // 如果提供了自定义名称映射，使用对应索引的名称
+          // 如果提供了自定义名称映射, 使用对应索引的名称
           customName = options.metadata.customNames[index] || '';
         } else if (options?.metadata?.customName) {
           // 如果提供了单个自定义名称
-          // 对于多文件上传，如果只有一个文件且有自定义名称，则使用它
-          // 如果有多个文件，则只在自定义名称不为空时添加序号
-          customName = files.length === 1 
-            ? options.metadata.customName 
+          // 对于多文件上传, 如果只有一个文件且有自定义名称, 则使用它
+          // 如果有多个文件, 则只在自定义名称不为空时添加序号
+          customName = files.length === 1
+            ? options.metadata.customName
             : `${options.metadata.customName}_${index + 1}`;
         }
-        
+
         addImage({
           // 使用哈希值作为ID
           id: result.hash,
@@ -189,7 +189,7 @@ export default function useImageUpload(defaultOptions?: UploadOptions): UseImage
         url: result.url,
         thumbnailUrl: result.thumbnailUrl,
         filename,
-        // 如果提供了自定义名称，则使用它
+        // 如果提供了自定义名称, 则使用它
         customName: options?.metadata?.customName || '',
         size: 0, // 无法获取URL图片大小
         uploadTime: Date.now(),
@@ -220,7 +220,7 @@ export default function useImageUpload(defaultOptions?: UploadOptions): UseImage
     },
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
-        // 如果提供了onDropCallback，则调用它获取元数据
+        // 如果提供了onDropCallback, 则调用它获取元数据
         if (defaultOptions?.onDropCallback) {
           const metadata = defaultOptions.onDropCallback(acceptedFiles);
           // 检查是否阻止默认上传行为

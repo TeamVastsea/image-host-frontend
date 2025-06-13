@@ -8,8 +8,8 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: '图床 - 简单、高效的图片托管服务',
-  description: '快速上传、管理和分享您的图片，支持多种上传方式和链接格式',
+  title: '图床 - 简单、高效的图片托管服务 | 瀚海工艺',
+  description: '快速上传、管理和分享您的图片, 支持多种上传方式和链接格式',
 };
 
 export default function RootLayout({

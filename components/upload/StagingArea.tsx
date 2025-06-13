@@ -68,7 +68,7 @@ export default function StagingArea({ uploadOptions }: StagingAreaProps) {
     const selectedImages = getSelectedImages();
     if (selectedImages.length === 0) return;
 
-    // 如果只有一个图片，使用单个上传
+    // 如果只有一个图片, 使用单个上传
     if (selectedImages.length === 1) {
       const image = selectedImages[0];
       await uploadFile(image.file, {
@@ -76,9 +76,9 @@ export default function StagingArea({ uploadOptions }: StagingAreaProps) {
         metadata: { customName: image.customName }
       });
     } else {
-      // 多个图片，使用批量上传
+      // 多个图片, 使用批量上传
       const files = selectedImages.map(image => image.file);
-      // 创建一个映射，将文件与自定义名称关联
+      // 创建一个映射, 将文件与自定义名称关联
       const customNames = selectedImages.reduce((map, image, index) => {
         map[index] = image.customName;
         return map;
@@ -90,11 +90,11 @@ export default function StagingArea({ uploadOptions }: StagingAreaProps) {
       });
     }
 
-    // 上传成功后，清空已上传的图片
+    // 上传成功后, 清空已上传的图片
     selectedImages.forEach(image => removeImage(image.id));
   };
 
-  // 如果暂存区为空，不显示组件
+  // 如果暂存区为空, 不显示组件
   if (images.length === 0) return null;
 
   return (

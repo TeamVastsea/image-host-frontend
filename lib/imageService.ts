@@ -57,7 +57,7 @@ class ImageService {
    * 获取图片分类列表
    */
   getCategories(): ImageCategory[] {
-    // 从本地存储获取分类，如果没有则使用默认分类
+    // 从本地存储获取分类, 如果没有则使用默认分类
     const storedCategories = localStorage.getItem('image-categories');
     return storedCategories ? JSON.parse(storedCategories) : this.defaultCategories;
   }
@@ -102,7 +102,7 @@ class ImageService {
     const categories = this.getCategories();
     const updatedCategories = categories.filter(c => c.id !== id);
 
-    // 如果长度相同，说明没有找到要删除的分类
+    // 如果长度相同, 说明没有找到要删除的分类
     if (updatedCategories.length === categories.length) {
       return false;
     }
@@ -120,10 +120,10 @@ class ImageService {
     // 从URL中提取哈希值或文件名
     const urlParts = imageUrl.split('/');
     const hashOrFilename = urlParts[urlParts.length - 1];
-    
+
     // 检查是否是哈希值格式（10个字符的字母数字组合）
     const isHashFormat = /^[a-f0-9]{10}$/.test(hashOrFilename);
-    
+
     // 根据格式生成URL
     switch (format) {
       case ImageFormat.THUMBNAIL:

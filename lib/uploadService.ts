@@ -16,7 +16,7 @@ export interface UploadOptions {
     customName?: string;
     [key: string]: any;
   };
-  onDropCallback?: (files: File[]) => { customName?: string; [key: string]: any };
+  onDropCallback?: (files: File[]) => { customName?: string;[key: string]: any };
 }
 
 // 默认上传选项
@@ -55,10 +55,10 @@ class UploadService {
       if (!file.type.startsWith('image/')) {
         throw new Error('只能上传图片文件');
       }
-      
+
       // 计算图片哈希值（在WebWorker中进行）
       const hash = await hashService.calculateHash(file);
-      
+
       // 检查是否已存在相同哈希值的图片（防止重复上传）
       if (hashService.isHashExists(hash)) {
         // 发布上传进度事件（直接设为100%）
@@ -66,7 +66,7 @@ class UploadService {
           filename: file.name,
           progress: 100,
         });
-        
+
         // 返回已存在的图片信息
         return {
           url: `${this.baseUrl}/${hash}`,
@@ -84,7 +84,7 @@ class UploadService {
 
       // 模拟上传延迟
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // 将哈希值添加到缓存
       hashService.addHash(hash);
 
@@ -180,7 +180,7 @@ class UploadService {
    * @param options 处理选项
    */
   private async processImage(file: File, options: UploadOptions): Promise<File> {
-    // 如果不需要处理，直接返回原文件
+    // 如果不需要处理, 直接返回原文件
     if (!options.removeExif && !options.addWatermark && !options.generateThumbnail) {
       return file;
     }
@@ -194,26 +194,26 @@ class UploadService {
         // 使用ExifReader读取EXIF信息（仅用于检测）
         const tags = ExifReader.load(arrayBuffer);
         console.log('EXIF信息已移除', tags);
-        // 注意：实际移除EXIF需要更复杂的处理，这里只是模拟
+        // 注意：实际移除EXIF需要更复杂的处理, 这里只是模拟
       }
 
       // 添加水印
       if (options.addWatermark && options.watermarkText) {
-        // 注意：实际添加水印需要使用Canvas，这里只是模拟
+        // 注意：实际添加水印需要使用Canvas, 这里只是模拟
         console.log('已添加水印:', options.watermarkText);
       }
 
       // 生成缩略图
       if (options.generateThumbnail) {
-        // 注意：实际生成缩略图需要使用Canvas，这里只是模拟
+        // 注意：实际生成缩略图需要使用Canvas, 这里只是模拟
         console.log('已生成缩略图');
       }
 
-      // 返回处理后的文件（这里简单返回原文件，实际应返回处理后的文件）
+      // 返回处理后的文件（这里简单返回原文件, 实际应返回处理后的文件）
       return file;
     } catch (error) {
       console.error('处理图片失败:', error);
-      // 如果处理失败，返回原文件
+      // 如果处理失败, 返回原文件
       return file;
     }
   }
@@ -249,7 +249,7 @@ class UploadService {
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // 模拟删除成功
-      // 注意：这里只是模拟，实际应该调用真实的删除API
+      // 注意：这里只是模拟, 实际应该调用真实的删除API
       console.log(`已删除图片: ${url}, 令牌: ${deleteToken}`);
 
       return true;

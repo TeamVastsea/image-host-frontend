@@ -1,6 +1,6 @@
 /**
  * 事件总线 - 实现发布订阅模式
- * 用于组件间通信，实现解耦
+ * 用于组件间通信, 实现解耦
  */
 
 type EventCallback = (...args: any[]) => void;
@@ -45,7 +45,7 @@ class EventBusImpl implements EventBus {
       if (index !== -1) {
         callbacks.splice(index, 1);
       }
-      // 如果没有回调函数了，删除该事件
+      // 如果没有回调函数了, 删除该事件
       if (callbacks.length === 0) {
         this.events.delete(event);
       }
