@@ -1,5 +1,4 @@
 import { generateId } from './utils';
-import eventBus, { EventTypes } from './eventBus';
 
 // 图片格式类型
 export enum ImageFormat {
@@ -31,6 +30,7 @@ export interface ImageInfo {
   url: string;
   thumbnailUrl: string;
   filename: string;
+  customName?: string; // 用户自定义的图片名称
   size: number;
   width?: number;
   height?: number;
@@ -45,14 +45,14 @@ export interface ImageInfo {
  */
 class ImageService {
   private baseUrl: string = 'https://image.vastsea.cc';
-  
+
   // 默认图片分类
   private defaultCategories: ImageCategory[] = [
     { id: 'default', name: '默认分类', description: '默认图片分类' },
     { id: 'screenshots', name: '截图', description: '屏幕截图' },
     { id: 'avatars', name: '头像', description: '个人头像' },
   ];
-  
+
   /**
    * 获取图片分类列表
    */
@@ -61,7 +61,7 @@ class ImageService {
     const storedCategories = localStorage.getItem('image-categories');
     return storedCategories ? JSON.parse(storedCategories) : this.defaultCategories;
   }
-  
+
   /**
    * 添加图片分类
    * @param name 分类名称
@@ -69,26 +69,26 @@ class ImageService {
    */
   addCategory(name: string, description?: string): ImageCategory {
     const categories = this.getCategories();
-    
+
     // 检查分类名称是否已存在
     if (categories.some(c => c.name === name)) {
       throw new Error(`分类 "${name}" 已存在`);
     }
-    
+
     // 创建新分类
     const newCategory: ImageCategory = {
       id: generateId(),
       name,
       description,
     };
-    
+
     // 添加到分类列表
     const updatedCategories = [...categories, newCategory];
     localStorage.setItem('image-categories', JSON.stringify(updatedCategories));
-    
+
     return newCategory;
   }
-  
+
   /**
    * 删除图片分类
    * @param id 分类ID
@@ -98,45 +98,48 @@ class ImageService {
     if (id === 'default') {
       throw new Error('不能删除默认分类');
     }
-    
+
     const categories = this.getCategories();
     const updatedCategories = categories.filter(c => c.id !== id);
-    
+
     // 如果长度相同，说明没有找到要删除的分类
     if (updatedCategories.length === categories.length) {
       return false;
     }
-    
+
     localStorage.setItem('image-categories', JSON.stringify(updatedCategories));
     return true;
   }
-  
+
   /**
    * 获取不同格式的图片URL
    * @param imageUrl 原始图片URL
    * @param format 图片格式
    */
   getImageUrl(imageUrl: string, format: ImageFormat = ImageFormat.ORIGINAL): string {
-    // 从URL中提取文件名
+    // 从URL中提取哈希值或文件名
     const urlParts = imageUrl.split('/');
-    const filename = urlParts[urlParts.length - 1];
+    const hashOrFilename = urlParts[urlParts.length - 1];
+    
+    // 检查是否是哈希值格式（10个字符的字母数字组合）
+    const isHashFormat = /^[a-f0-9]{10}$/.test(hashOrFilename);
     
     // 根据格式生成URL
     switch (format) {
       case ImageFormat.THUMBNAIL:
-        return `${this.baseUrl}/thumbnails/${filename}`;
+        return `${this.baseUrl}/thumbnails/${hashOrFilename}`;
       case ImageFormat.SMALL:
-        return `${this.baseUrl}/small/${filename}`;
+        return `${this.baseUrl}/small/${hashOrFilename}`;
       case ImageFormat.MEDIUM:
-        return `${this.baseUrl}/medium/${filename}`;
+        return `${this.baseUrl}/medium/${hashOrFilename}`;
       case ImageFormat.LARGE:
-        return `${this.baseUrl}/large/${filename}`;
+        return `${this.baseUrl}/large/${hashOrFilename}`;
       case ImageFormat.ORIGINAL:
       default:
         return imageUrl;
     }
   }
-  
+
   /**
    * 生成不同格式的图片链接
    * @param imageUrl 图片URL
@@ -155,7 +158,7 @@ class ImageService {
         return imageUrl;
     }
   }
-  
+
   /**
    * 获取图片信息
    * @param url 图片URL
@@ -166,7 +169,7 @@ class ImageService {
       // 注意：实际应该从服务器获取或加载图片获取尺寸等信息
       const urlParts = url.split('/');
       const filename = urlParts[urlParts.length - 1];
-      
+
       // 创建图片对象获取尺寸
       return new Promise((resolve) => {
         const img = new Image();

@@ -14,9 +14,9 @@ export default function UploadPage() {
           支持拖拽上传、粘贴上传、URL上传等多种方式
         </p>
       </div>
-      
+
       <UploadArea />
-      
+
       <div className="max-w-3xl mx-auto bg-muted/30 rounded-lg p-6 space-y-4">
         <h2 className="text-xl font-semibold">上传说明</h2>
         <ul className="list-disc list-inside space-y-2 text-muted-foreground">

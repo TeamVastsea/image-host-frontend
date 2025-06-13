@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Copy, Check } from 'lucide-react';
 import { ImageInfo, LinkFormat, ImageFormat } from '@/lib/imageService';
 import useImageLink from '@/hooks/useImageLink';
@@ -32,10 +32,12 @@ export default function ImageLinkDialog({
   // 使用链接钩子
   const { generatedLink, copied, generateLink, copyLink, resetCopied } = useImageLink();
   
-  // 当对话框打开或图片/格式变更时生成链接
-  if (open && image && image.url) {
-    generateLink(image.url, { imageFormat, linkFormat });
-  }
+  // 使用useEffect在对话框打开或图片/格式变更时生成链接
+  useEffect(() => {
+    if (open && image && image.url) {
+      generateLink(image.url, { imageFormat, linkFormat });
+    }
+  }, [open, image, imageFormat, linkFormat, generateLink]);
   
   // 当对话框关闭时重置状态
   const handleOpenChange = (newOpen: boolean) => {
@@ -59,10 +61,22 @@ export default function ImageLinkDialog({
               <div className="w-32 h-32 overflow-hidden rounded border">
                 <img
                   src={image.thumbnailUrl || image.url}
-                  alt={image.filename}
+                  alt={image.customName || image.filename}
                   className="w-full h-full object-cover"
                 />
               </div>
+            </div>
+            
+            {/* 图片名称 */}
+            <div className="text-center">
+              <p className="font-medium text-sm">
+                {image.customName || image.filename}
+              </p>
+              {image.customName && (
+                <p className="text-xs text-muted-foreground">
+                  {image.filename}
+                </p>
+              )}
             </div>
             
             {/* 格式选项 */}

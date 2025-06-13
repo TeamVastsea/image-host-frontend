@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
@@ -30,18 +30,18 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname();
   // 认证状态
   const { user, isAuthenticated, logout } = useAuthStore();
-  
+
   // 在客户端挂载后再渲染主题切换按钮
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   // 导航链接
   const navLinks = [
     { href: '/upload', label: '上传', icon: <Upload size={16} /> },
     { href: '/gallery', label: '图库', icon: <ImageIcon size={16} /> },
   ];
-  
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* 导航栏 */}
@@ -52,7 +52,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <ImageIcon size={24} />
             <span>图床</span>
           </Link>
-          
+
           {/* 导航链接 */}
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
@@ -69,7 +69,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
               </Button>
             ))}
           </nav>
-          
+
           {/* 右侧操作 */}
           <div className="flex items-center gap-2">
             {/* 主题切换 */}
@@ -83,7 +83,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </Button>
             )}
-            
+
             {/* 用户菜单 */}
             {isAuthenticated && user ? (
               <DropdownMenu>
@@ -123,19 +123,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </div>
         </div>
       </header>
-      
+
       {/* 主内容 */}
       <main className="flex-grow container mx-auto px-4 py-6">
         {children}
       </main>
-      
+
       {/* 页脚 */}
       <footer className="border-t py-6 bg-muted/40">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} 图床. 保留所有权利.</p>
         </div>
       </footer>
-      
+
       {/* 提示消息 */}
       <Toaster position="top-center" richColors />
     </div>

@@ -52,6 +52,23 @@ export function getFilenameFromUrl(url: string): string {
 }
 
 /**
+ * 从URL中提取哈希值
+ */
+export function getHashFromUrl(url: string): string {
+  const filename = getFilenameFromUrl(url);
+  // 如果文件名是10个字符的哈希值格式
+  if (/^[a-f0-9]{10}$/.test(filename)) {
+    return filename;
+  }
+  // 如果文件名包含哈希值（旧格式：hash-filename.ext）
+  const hashMatch = filename.match(/^([a-f0-9]{10})-/);
+  if (hashMatch) {
+    return hashMatch[1];
+  }
+  return '';
+}
+
+/**
  * 生成不同格式的图片链接
  */
 export function generateImageLinks(imageUrl: string): {

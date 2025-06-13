@@ -31,35 +31,35 @@ export default function useImageLink(): UseImageLinkReturn {
   const [generatedLink, setGeneratedLink] = useState<string>('');
   // 是否已复制
   const [copied, setCopied] = useState<boolean>(false);
-  
+
   // 生成链接
   const generateLink = useCallback((imageUrl: string, options: LinkOptions) => {
     // 获取指定格式的图片URL
     const formattedImageUrl = imageService.getImageUrl(imageUrl, options.imageFormat);
-    
+
     // 生成指定格式的链接
     const link = imageService.generateLink(formattedImageUrl, options.linkFormat);
-    
+
     // 设置生成的链接
     setGeneratedLink(link);
-    
+
     // 重置复制状态
     setCopied(false);
   }, []);
-  
+
   // 复制链接
   const copyLink = useCallback(() => {
     if (!generatedLink) return;
-    
+
     // 复制到剪贴板
     copyToClipboard(generatedLink)
       .then(() => {
         // 设置复制状态
         setCopied(true);
-        
+
         // 显示成功提示
         toast.success('链接已复制到剪贴板');
-        
+
         // 3秒后重置复制状态
         setTimeout(() => {
           setCopied(false);
@@ -70,12 +70,12 @@ export default function useImageLink(): UseImageLinkReturn {
         toast.error('复制失败: ' + (error instanceof Error ? error.message : '未知错误'));
       });
   }, [generatedLink]);
-  
+
   // 重置复制状态
   const resetCopied = useCallback(() => {
     setCopied(false);
   }, []);
-  
+
   return {
     generatedLink,
     copied,

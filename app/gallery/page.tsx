@@ -14,7 +14,7 @@ export default function GalleryPage() {
           查看和管理您上传的所有图片
         </p>
       </div>
-      
+
       <ImageGallery />
     </div>
   );

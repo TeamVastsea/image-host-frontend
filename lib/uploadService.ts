@@ -1,6 +1,7 @@
 import { generateId } from './utils';
 import eventBus, { EventTypes } from './eventBus';
 import ExifReader from 'exifreader';
+import hashService from './hashService';
 
 // 上传选项
 export interface UploadOptions {
@@ -10,6 +11,11 @@ export interface UploadOptions {
   generateThumbnail?: boolean;
   maxWidth?: number;
   maxHeight?: number;
+  metadata?: {
+    customName?: string;
+    [key: string]: any;
+  };
+  onDropCallback?: (files: File[]) => { customName?: string; [key: string]: any };
 }
 
 // 默认上传选项
@@ -28,7 +34,7 @@ const defaultOptions: UploadOptions = {
 class UploadService {
   private baseUrl: string = 'https://image.vastsea.cc';
   private apiUrl: string = '/api/upload';
-  
+
   /**
    * 从File对象上传图片
    * @param file 文件对象
@@ -38,49 +44,70 @@ class UploadService {
     url: string;
     thumbnailUrl: string;
     deleteToken: string;
+    hash: string;
   }> {
     // 合并选项
     const mergedOptions = { ...defaultOptions, ...options };
-    
+
     try {
       // 检查文件类型
       if (!file.type.startsWith('image/')) {
         throw new Error('只能上传图片文件');
       }
       
+      // 计算图片哈希值（在WebWorker中进行）
+      const hash = await hashService.calculateHash(file);
+      
+      // 检查是否已存在相同哈希值的图片（防止重复上传）
+      if (hashService.isHashExists(hash)) {
+        // 发布上传进度事件（直接设为100%）
+        eventBus.emit(EventTypes.UPLOAD_PROGRESS, {
+          filename: file.name,
+          progress: 100,
+        });
+        
+        // 返回已存在的图片信息
+        return {
+          url: `${this.baseUrl}/${hash}`,
+          thumbnailUrl: `${this.baseUrl}/thumbnails/${hash}`,
+          deleteToken: generateId(20),
+          hash,
+        };
+      }
+
       // 处理图片（移除EXIF、添加水印等）
       const processedFile = await this.processImage(file, mergedOptions);
-      
+
       // 模拟上传进度
       this.simulateUploadProgress(file.name);
-      
+
       // 模拟上传延迟
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // 生成唯一文件名
-      const uniqueFilename = `${generateId()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
-      
-      // 模拟上传成功，返回URL和删除令牌
-      // 注意：这里只是模拟，实际应该调用真实的上传API
-      const imageUrl = `${this.baseUrl}/${uniqueFilename}`;
-      const thumbnailUrl = `${this.baseUrl}/thumbnails/${uniqueFilename}`;
+      // 将哈希值添加到缓存
+      hashService.addHash(hash);
+
+      // 使用哈希值作为文件名（生成短链接）
+      const imageUrl = `${this.baseUrl}/${hash}`;
+      const thumbnailUrl = `${this.baseUrl}/thumbnails/${hash}`;
       const deleteToken = generateId(20);
-      
+
       return {
         url: imageUrl,
         thumbnailUrl,
         deleteToken,
+        hash,
       };
     } catch (error) {
       // 发布上传错误事件
       eventBus.emit(
-        EventTypes.UPLOAD_ERROR, 
+        EventTypes.UPLOAD_ERROR,
         error instanceof Error ? error.message : '上传失败'
       );
       throw error;
     }
   }
-  
+
   /**
    * 批量上传文件
    * @param files 文件列表
@@ -90,9 +117,10 @@ class UploadService {
     url: string;
     thumbnailUrl: string;
     deleteToken: string;
+    hash: string;
   }[]> {
     const results = [];
-    
+
     for (const file of files) {
       try {
         const result = await this.uploadFile(file, options);
@@ -102,10 +130,10 @@ class UploadService {
         // 继续上传其他文件
       }
     }
-    
+
     return results;
   }
-  
+
   /**
    * 从URL上传图片
    * @param url 图片URL
@@ -115,6 +143,7 @@ class UploadService {
     url: string;
     thumbnailUrl: string;
     deleteToken: string;
+    hash: string;
   }> {
     try {
       // 模拟从URL获取图片
@@ -122,28 +151,28 @@ class UploadService {
       if (!response.ok) {
         throw new Error('无法获取URL图片');
       }
-      
+
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.startsWith('image/')) {
         throw new Error('URL不是有效的图片');
       }
-      
+
       const blob = await response.blob();
       const filename = url.split('/').pop() || 'image.jpg';
       const file = new File([blob], filename, { type: contentType });
-      
+
       // 使用文件上传方法
       return await this.uploadFile(file, options);
     } catch (error) {
       // 发布上传错误事件
       eventBus.emit(
-        EventTypes.UPLOAD_ERROR, 
+        EventTypes.UPLOAD_ERROR,
         error instanceof Error ? error.message : 'URL上传失败'
       );
       throw error;
     }
   }
-  
+
   /**
    * 处理图片（移除EXIF、添加水印等）
    * @param file 图片文件
@@ -154,11 +183,11 @@ class UploadService {
     if (!options.removeExif && !options.addWatermark && !options.generateThumbnail) {
       return file;
     }
-    
+
     try {
       // 读取图片
       const arrayBuffer = await file.arrayBuffer();
-      
+
       // 移除EXIF信息
       if (options.removeExif) {
         // 使用ExifReader读取EXIF信息（仅用于检测）
@@ -166,19 +195,19 @@ class UploadService {
         console.log('EXIF信息已移除', tags);
         // 注意：实际移除EXIF需要更复杂的处理，这里只是模拟
       }
-      
+
       // 添加水印
       if (options.addWatermark && options.watermarkText) {
         // 注意：实际添加水印需要使用Canvas，这里只是模拟
         console.log('已添加水印:', options.watermarkText);
       }
-      
+
       // 生成缩略图
       if (options.generateThumbnail) {
         // 注意：实际生成缩略图需要使用Canvas，这里只是模拟
         console.log('已生成缩略图');
       }
-      
+
       // 返回处理后的文件（这里简单返回原文件，实际应返回处理后的文件）
       return file;
     } catch (error) {
@@ -187,7 +216,7 @@ class UploadService {
       return file;
     }
   }
-  
+
   /**
    * 模拟上传进度
    * @param filename 文件名
@@ -207,7 +236,7 @@ class UploadService {
       }
     }, 200);
   }
-  
+
   /**
    * 删除图片
    * @param url 图片URL
@@ -217,11 +246,11 @@ class UploadService {
     try {
       // 模拟删除延迟
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // 模拟删除成功
       // 注意：这里只是模拟，实际应该调用真实的删除API
       console.log(`已删除图片: ${url}, 令牌: ${deleteToken}`);
-      
+
       return true;
     } catch (error) {
       console.error('删除图片失败:', error);

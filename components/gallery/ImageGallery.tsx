@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Grid, List, Trash2, Copy, ExternalLink, Link2 } from 'lucide-react';
 import useImageStore from '@/store/imageStore';
 import uploadService from '@/lib/uploadService';
@@ -15,24 +14,25 @@ import { ImageInfo } from '@/lib/imageService';
 
 export default function ImageGallery() {
   // 图片存储
-  const { images, removeImage } = useImageStore();
-  
+  const images = useImageStore(state => state.images);
+  const removeImage = useImageStore(state => state.removeImage);
+
   // 视图模式
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  
+
   // 搜索关键词
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   // 链接对话框
   const [linkDialogOpen, setLinkDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<ImageInfo | null>(null);
-  
+
   // 处理删除图片
   const handleDelete = async (image: ImageInfo) => {
     try {
       // 删除图片
       const success = await uploadService.deleteImage(image.url, image.deleteToken);
-      
+
       if (success) {
         // 从存储中移除
         removeImage(image.id);
@@ -44,27 +44,27 @@ export default function ImageGallery() {
       toast.error('删除失败: ' + (error instanceof Error ? error.message : '未知错误'));
     }
   };
-  
+
   // 处理复制链接
   const handleCopyLink = (url: string) => {
     navigator.clipboard.writeText(url)
       .then(() => toast.success('链接已复制'))
       .catch(() => toast.error('复制失败'));
   };
-  
+
   // 处理打开链接对话框
   const handleOpenLinkDialog = (image: ImageInfo) => {
     setSelectedImage(image);
     setLinkDialogOpen(true);
   };
-  
+
   // 过滤图片
   const filteredImages = searchTerm
-    ? images.filter(img => 
-        img.filename.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    ? images.filter(img =>
+      img.filename.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : images;
-  
+
   return (
     <div className="space-y-4">
       {/* 工具栏 */}
@@ -77,7 +77,7 @@ export default function ImageGallery() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Button
             variant={viewMode === 'grid' ? 'default' : 'outline'}
@@ -97,7 +97,7 @@ export default function ImageGallery() {
           </Button>
         </div>
       </div>
-      
+
       {/* 图片列表 */}
       {filteredImages.length === 0 ? (
         <Card>
@@ -116,7 +116,7 @@ export default function ImageGallery() {
                   alt={image.filename}
                   className="w-full h-full object-cover"
                 />
-                
+
                 {/* 悬停操作 */}
                 <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                   <Button
@@ -157,13 +157,16 @@ export default function ImageGallery() {
                   </Button>
                 </div>
               </div>
-              
+
               <div className="p-2">
-                <p className="text-xs truncate" title={image.filename}>
-                  {image.filename}
+                <p className="text-xs truncate" title={image.customName || image.filename}>
+                  {image.customName || image.filename}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {formatFileSize(image.size)}
+                  {image.customName && (
+                    <span className="ml-1">· {image.filename}</span>
+                  )}
                 </p>
               </div>
             </Card>
@@ -182,17 +185,20 @@ export default function ImageGallery() {
                     className="h-full w-full object-cover rounded"
                   />
                 </div>
-                
+
                 <div className="flex-grow min-w-0">
-                  <p className="font-medium truncate" title={image.filename}>
-                    {image.filename}
+                  <p className="font-medium truncate" title={image.customName || image.filename}>
+                    {image.customName || image.filename}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {formatFileSize(image.size)} · 
+                    {formatFileSize(image.size)} ·
                     {new Date(image.uploadTime).toLocaleString()}
+                    {image.customName && (
+                      <span className="ml-1">· {image.filename}</span>
+                    )}
                   </p>
                 </div>
-                
+
                 <div className="flex items-center gap-1 shrink-0">
                   <Button
                     variant="ghost"
@@ -236,7 +242,7 @@ export default function ImageGallery() {
           ))}
         </div>
       )}
-      
+
       {/* 链接对话框 */}
       <ImageLinkDialog
         open={linkDialogOpen}
