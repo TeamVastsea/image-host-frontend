@@ -1,6 +1,0 @@
-BUCKET = "vastsea-1300179300"
-REGION = "ap-chengdu"
-SECRET_ID = "AKID51tIZaP2WpwsQo8PZaYTEoLqNnHas583"
-SECRET_KEY = "ynU2Ws7MYbVGqRvGPQK3awCPTKoFcu4I"
-DB_URL = "mongodb://root:MiK08h1kEQNsIDfo@192.168.1.2:27017/"
-BACKEND_BASE = "http://main.vastsea.cc:9527"
