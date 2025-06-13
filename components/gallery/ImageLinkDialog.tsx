@@ -30,17 +30,17 @@ export default function ImageLinkDialog({
   const [imageFormat, setImageFormat] = useState<ImageFormat>(ImageFormat.ORIGINAL);
   // 链接格式
   const [linkFormat, setLinkFormat] = useState<LinkFormat>(LinkFormat.URL);
-  
+
   // 使用链接钩子
   const { generatedLink, copied, generateLink, copyLink, resetCopied } = useImageLink();
-  
+
   // 使用useEffect在对话框打开或图片/格式变更时生成链接
   useEffect(() => {
     if (open && image && image.url) {
       generateLink(image.url, { imageFormat, linkFormat });
     }
   }, [open, image, imageFormat, linkFormat, generateLink]);
-  
+
   // 当对话框关闭时重置状态
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
@@ -48,14 +48,14 @@ export default function ImageLinkDialog({
     }
     onOpenChange(newOpen);
   };
-  
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>图片链接</DialogTitle>
         </DialogHeader>
-        
+
         {image && (
           <div className="space-y-4">
             {/* 图片预览 */}
@@ -71,7 +71,7 @@ export default function ImageLinkDialog({
                 />
               </div>
             </div>
-            
+
             {/* 图片名称 */}
             <div className="text-center">
               <p className="font-medium text-sm">
@@ -83,7 +83,7 @@ export default function ImageLinkDialog({
                 </p>
               )}
             </div>
-            
+
             {/* 格式选项 */}
             <div className="space-y-3">
               {/* 图片格式 */}
@@ -107,7 +107,7 @@ export default function ImageLinkDialog({
                   </TabsList>
                 </Tabs>
               </div>
-              
+
               {/* 链接格式 */}
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">链接格式</label>
@@ -133,7 +133,7 @@ export default function ImageLinkDialog({
                 </Tabs>
               </div>
             </div>
-            
+
             {/* 生成的链接 */}
             <div className="space-y-1.5">
               <label className="text-sm font-medium">生成的链接</label>

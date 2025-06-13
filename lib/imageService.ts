@@ -127,13 +127,9 @@ class ImageService {
     // 根据格式生成URL
     switch (format) {
       case ImageFormat.THUMBNAIL:
-        return `${this.baseUrl}/thumbnails/${hashOrFilename}`;
-      case ImageFormat.SMALL:
-        return `${this.baseUrl}/small/${hashOrFilename}`;
+        return `${this.baseUrl}/t/${hashOrFilename}`;
       case ImageFormat.MEDIUM:
-        return `${this.baseUrl}/medium/${hashOrFilename}`;
-      case ImageFormat.LARGE:
-        return `${this.baseUrl}/large/${hashOrFilename}`;
+        return `${this.baseUrl}/m/${hashOrFilename}`;
       case ImageFormat.ORIGINAL:
       default:
         return imageUrl;
