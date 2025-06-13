@@ -1,0 +1,140 @@
+'use client';
+
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Copy, Check } from 'lucide-react';
+import { ImageInfo, LinkFormat, ImageFormat } from '@/lib/imageService';
+import useImageLink from '@/hooks/useImageLink';
+
+interface ImageLinkDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  image: ImageInfo | null;
+}
+
+export default function ImageLinkDialog({
+  open,
+  onOpenChange,
+  image,
+}: ImageLinkDialogProps) {
+  // 图片格式
+  const [imageFormat, setImageFormat] = useState<ImageFormat>(ImageFormat.ORIGINAL);
+  // 链接格式
+  const [linkFormat, setLinkFormat] = useState<LinkFormat>(LinkFormat.URL);
+  
+  // 使用链接钩子
+  const { generatedLink, copied, generateLink, copyLink, resetCopied } = useImageLink();
+  
+  // 当对话框打开或图片/格式变更时生成链接
+  if (open && image && image.url) {
+    generateLink(image.url, { imageFormat, linkFormat });
+  }
+  
+  // 当对话框关闭时重置状态
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
+      resetCopied();
+    }
+    onOpenChange(newOpen);
+  };
+  
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>图片链接</DialogTitle>
+        </DialogHeader>
+        
+        {image && (
+          <div className="space-y-4">
+            {/* 图片预览 */}
+            <div className="flex justify-center">
+              <div className="w-32 h-32 overflow-hidden rounded border">
+                <img
+                  src={image.thumbnailUrl || image.url}
+                  alt={image.filename}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            
+            {/* 格式选项 */}
+            <div className="space-y-3">
+              {/* 图片格式 */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">图片格式</label>
+                <Tabs
+                  value={imageFormat}
+                  onValueChange={(value) => setImageFormat(value as ImageFormat)}
+                  className="w-full"
+                >
+                  <TabsList className="grid grid-cols-3 h-8">
+                    <TabsTrigger value={ImageFormat.ORIGINAL} className="text-xs">
+                      原图
+                    </TabsTrigger>
+                    <TabsTrigger value={ImageFormat.THUMBNAIL} className="text-xs">
+                      缩略图
+                    </TabsTrigger>
+                    <TabsTrigger value={ImageFormat.MEDIUM} className="text-xs">
+                      中等
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+              
+              {/* 链接格式 */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">链接格式</label>
+                <Tabs
+                  value={linkFormat}
+                  onValueChange={(value) => setLinkFormat(value as LinkFormat)}
+                  className="w-full"
+                >
+                  <TabsList className="grid grid-cols-4 h-8">
+                    <TabsTrigger value={LinkFormat.URL} className="text-xs">
+                      URL
+                    </TabsTrigger>
+                    <TabsTrigger value={LinkFormat.HTML} className="text-xs">
+                      HTML
+                    </TabsTrigger>
+                    <TabsTrigger value={LinkFormat.MARKDOWN} className="text-xs">
+                      Markdown
+                    </TabsTrigger>
+                    <TabsTrigger value={LinkFormat.BBCODE} className="text-xs">
+                      BBCode
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            </div>
+            
+            {/* 生成的链接 */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">生成的链接</label>
+              <div className="flex items-center gap-2">
+                <div className="flex-grow p-2 bg-muted rounded text-sm font-mono overflow-x-auto whitespace-nowrap">
+                  {generatedLink}
+                </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={copyLink}
+                  className="shrink-0"
+                >
+                  {copied ? <Check size={16} /> : <Copy size={16} />}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
