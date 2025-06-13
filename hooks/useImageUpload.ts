@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'sonner';
+
+import eventBus, { EventTypes } from '@/lib/eventBus';
 import uploadService, { UploadOptions } from '@/lib/uploadService';
 import useImageStore from '@/store/imageStore';
-import eventBus, { EventTypes } from '@/lib/eventBus';
-import { toast } from 'sonner';
 
 // 上传状态
 export interface UploadStatus {

@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { generateId } from '@/lib/utils';
+
 import eventBus, { EventTypes } from '@/lib/eventBus';
+import { generateId } from '@/lib/utils';
 
 // 图片类型定义
 export interface ImageInfo {

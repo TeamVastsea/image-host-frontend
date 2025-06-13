@@ -1,7 +1,8 @@
-import { generateId } from './utils';
-import eventBus, { EventTypes } from './eventBus';
 import ExifReader from 'exifreader';
+
+import eventBus, { EventTypes } from './eventBus';
 import hashService from './hashService';
+import { generateId } from './utils';
 
 // 上传选项
 export interface UploadOptions {

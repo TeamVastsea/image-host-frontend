@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
 import eventBus, { EventTypes } from '@/lib/eventBus';
 
 // 用户类型定义

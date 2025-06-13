@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { Moon, Sun, Upload, Image as ImageIcon, LogOut, User } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { usePathname } from 'next/navigation';
+import { useTheme } from 'next-themes';
+import { useState, useEffect } from 'react';
+import { Toaster } from 'sonner';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,9 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Toaster } from 'sonner';
-import { Moon, Sun, Upload, Image as ImageIcon, LogOut, User } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import useAuthStore from '@/store/authStore';
 
 interface MainLayoutProps {

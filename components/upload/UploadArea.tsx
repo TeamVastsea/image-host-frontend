@@ -1,16 +1,18 @@
 "use client";
 
+import { ImageIcon, X, Link2, UploadCloud } from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { ImageIcon, X, Link2, UploadCloud } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import useImageUpload from '@/hooks/useImageUpload';
 import { UploadOptions } from '@/lib/uploadService';
 import useStagingStore from '@/store/stagingStore';
+
 import StagingArea from './StagingArea';
 
 export default function UploadArea() {

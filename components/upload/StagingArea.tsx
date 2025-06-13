@@ -1,16 +1,17 @@
 "use client";
 
+import { Trash2, Eye, X } from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Trash2, Eye, X } from 'lucide-react';
-import useStagingStore, { StagingImage } from '@/store/stagingStore';
 import useImageUpload from '@/hooks/useImageUpload';
 import { UploadOptions } from '@/lib/uploadService';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import useStagingStore, { StagingImage } from '@/store/stagingStore';
 
 interface StagingAreaProps {
   uploadOptions: UploadOptions;
