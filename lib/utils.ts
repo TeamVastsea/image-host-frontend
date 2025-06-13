@@ -38,8 +38,8 @@ export async function copyToClipboard(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
     return true;
-  } catch (err) {
-    console.error("Failed to copy text: ", err);
+  } catch {
+    // 静默失败，返回false
     return false;
   }
 }

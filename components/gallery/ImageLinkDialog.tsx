@@ -1,6 +1,7 @@
 "use client";
 
 import { Copy, Check } from 'lucide-react';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -60,10 +61,13 @@ export default function ImageLinkDialog({
             {/* 图片预览 */}
             <div className="flex justify-center">
               <div className="w-32 h-32 overflow-hidden rounded border">
-                <img
+                <Image
                   src={image.thumbnailUrl || image.url}
                   alt={image.customName || image.filename}
                   className="w-full h-full object-cover"
+                  width={128}
+                  height={128}
+                  unoptimized
                 />
               </div>
             </div>

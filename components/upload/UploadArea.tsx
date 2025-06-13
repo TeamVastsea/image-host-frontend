@@ -4,7 +4,7 @@ import { ImageIcon, X, Link2, UploadCloud } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
@@ -89,7 +89,7 @@ export default function UploadArea() {
   };
 
   // 处理选项变更
-  const handleOptionChange = (key: keyof UploadOptions, value: any) => {
+  const handleOptionChange = (key: keyof UploadOptions, value: string | boolean | number | Record<string, unknown>) => {
     setUploadOptions(prev => ({
       ...prev,
       [key]: value,

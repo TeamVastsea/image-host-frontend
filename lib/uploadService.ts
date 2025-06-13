@@ -4,6 +4,12 @@ import eventBus, { EventTypes } from './eventBus';
 import hashService from './hashService';
 import { generateId } from './utils';
 
+// 元数据类型
+export interface ImageMetadata {
+  customName?: string;
+  [key: string]: string | number | boolean | undefined;
+}
+
 // 上传选项
 export interface UploadOptions {
   removeExif?: boolean;
@@ -12,11 +18,8 @@ export interface UploadOptions {
   generateThumbnail?: boolean;
   maxWidth?: number;
   maxHeight?: number;
-  metadata?: {
-    customName?: string;
-    [key: string]: any;
-  };
-  onDropCallback?: (files: File[]) => { customName?: string;[key: string]: any };
+  metadata?: ImageMetadata;
+  onDropCallback?: (files: File[]) => ImageMetadata;
 }
 
 // 默认上传选项
@@ -79,8 +82,8 @@ class UploadService {
       // 处理图片（移除EXIF、添加水印等）
       const processedFile = await this.processImage(file, mergedOptions);
 
-      // 模拟上传进度
-      this.simulateUploadProgress(file.name);
+      // 模拟上传进度（使用处理后的文件名）
+      this.simulateUploadProgress(processedFile.name);
 
       // 模拟上传延迟
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -127,8 +130,8 @@ class UploadService {
         const result = await this.uploadFile(file, options);
         results.push(result);
       } catch (error) {
-        console.error(`上传文件 ${file.name} 失败:`, error);
-        // 继续上传其他文件
+        // 记录错误但继续上传其他文件
+        eventBus.emit(EventTypes.UPLOAD_ERROR, `上传文件 ${file.name} 失败: ${error instanceof Error ? error.message : '未知错误'}`);
       }
     }
 
@@ -192,28 +195,42 @@ class UploadService {
       // 移除EXIF信息
       if (options.removeExif) {
         // 使用ExifReader读取EXIF信息（仅用于检测）
-        const tags = ExifReader.load(arrayBuffer);
-        console.log('EXIF信息已移除', tags);
+        // 使用前缀_表示未使用的变量
+        const _tags = ExifReader.load(arrayBuffer);
+        // 记录EXIF已移除的事件
+        eventBus.emit(EventTypes.UPLOAD_PROGRESS, {
+          filename: file.name,
+          progress: 30,
+          message: 'EXIF信息已移除'
+        });
         // 注意：实际移除EXIF需要更复杂的处理, 这里只是模拟
       }
 
       // 添加水印
       if (options.addWatermark && options.watermarkText) {
         // 注意：实际添加水印需要使用Canvas, 这里只是模拟
-        console.log('已添加水印:', options.watermarkText);
+        eventBus.emit(EventTypes.UPLOAD_PROGRESS, {
+          filename: file.name,
+          progress: 50,
+          message: `已添加水印: ${options.watermarkText}`
+        });
       }
 
       // 生成缩略图
       if (options.generateThumbnail) {
         // 注意：实际生成缩略图需要使用Canvas, 这里只是模拟
-        console.log('已生成缩略图');
+        eventBus.emit(EventTypes.UPLOAD_PROGRESS, {
+          filename: file.name,
+          progress: 70,
+          message: '已生成缩略图'
+        });
       }
 
       // 返回处理后的文件（这里简单返回原文件, 实际应返回处理后的文件）
       return file;
     } catch (error) {
-      console.error('处理图片失败:', error);
-      // 如果处理失败, 返回原文件
+      // 如果处理失败，记录错误并返回原文件
+      eventBus.emit(EventTypes.UPLOAD_ERROR, `处理图片失败: ${error instanceof Error ? error.message : '未知错误'}`);
       return file;
     }
   }
@@ -243,18 +260,23 @@ class UploadService {
    * @param url 图片URL
    * @param deleteToken 删除令牌
    */
-  async deleteImage(url: string, deleteToken: string): Promise<boolean> {
+  async deleteImage(url: string, _deleteToken: string): Promise<boolean> {
     try {
       // 模拟删除延迟
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // 模拟删除成功
       // 注意：这里只是模拟, 实际应该调用真实的删除API
-      console.log(`已删除图片: ${url}, 令牌: ${deleteToken}`);
+      eventBus.emit(EventTypes.UPLOAD_PROGRESS, {
+        filename: url.split('/').pop() || 'unknown',
+        progress: 100,
+        message: '图片已删除'
+      });
 
       return true;
     } catch (error) {
-      console.error('删除图片失败:', error);
+      // 记录删除失败的错误
+      eventBus.emit(EventTypes.UPLOAD_ERROR, `删除图片失败: ${error instanceof Error ? error.message : '未知错误'}`);
       return false;
     }
   }

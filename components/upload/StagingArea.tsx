@@ -1,6 +1,7 @@
 "use client";
 
 import { Trash2, Eye, X } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -153,10 +154,13 @@ export default function StagingArea({ uploadOptions }: StagingAreaProps) {
                 className="h-16 w-16 shrink-0 cursor-pointer"
                 onClick={() => handlePreview(image)}
               >
-                <img
+                <Image
                   src={image.previewUrl}
                   alt={image.customName}
                   className="h-full w-full object-cover rounded"
+                  width={64}
+                  height={64}
+                  unoptimized
                 />
               </div>
 
@@ -251,10 +255,13 @@ export default function StagingArea({ uploadOptions }: StagingAreaProps) {
             {previewImage && (
               <div className="space-y-4">
                 <div className="flex justify-center">
-                  <img
+                  <Image
                     src={previewImage.previewUrl}
                     alt={previewImage.customName}
                     className="max-h-[60vh] max-w-full object-contain rounded"
+                    width={800}
+                    height={600}
+                    unoptimized
                   />
                 </div>
                 <div className="text-center">

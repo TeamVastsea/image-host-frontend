@@ -1,6 +1,7 @@
 "use client";
 
 import { Grid, List, Trash2, Copy, ExternalLink, Link2 } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -115,10 +116,13 @@ export default function ImageGallery() {
           {filteredImages.map((image) => (
             <Card key={image.id} className="overflow-hidden group">
               <div className="relative aspect-square">
-                <img
+                <Image
                   src={image.thumbnailUrl || image.url}
                   alt={image.filename}
                   className="w-full h-full object-cover"
+                  width={300}
+                  height={300}
+                  unoptimized
                 />
 
                 {/* 悬停操作 */}
@@ -183,10 +187,13 @@ export default function ImageGallery() {
             <Card key={image.id}>
               <div className="p-3 flex items-center gap-3">
                 <div className="h-12 w-12 shrink-0">
-                  <img
+                  <Image
                     src={image.thumbnailUrl || image.url}
                     alt={image.filename}
                     className="h-full w-full object-cover rounded"
+                    width={48}
+                    height={48}
+                    unoptimized
                   />
                 </div>
 

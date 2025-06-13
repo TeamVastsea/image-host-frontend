@@ -122,7 +122,7 @@ class ImageService {
     const hashOrFilename = urlParts[urlParts.length - 1];
 
     // 检查是否是哈希值格式（10个字符的字母数字组合）
-    const isHashFormat = /^[a-f0-9]{10}$/.test(hashOrFilename);
+    // 注意：这里只是为了文档说明，实际上不需要检查格式
 
     // 根据格式生成URL
     switch (format) {

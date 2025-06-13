@@ -3,17 +3,17 @@
  * 用于组件间通信, 实现解耦
  */
 
-type EventCallback = (...args: any[]) => void;
+type EventCallback<T = unknown> = (...args: T[]) => void;
 
 interface EventBus {
-  on(event: string, callback: EventCallback): void;
-  off(event: string, callback: EventCallback): void;
-  emit(event: string, ...args: any[]): void;
-  once(event: string, callback: EventCallback): void;
+  on<T = unknown>(event: string, callback: EventCallback<T>): void;
+  off<T = unknown>(event: string, callback: EventCallback<T>): void;
+  emit<T = unknown>(event: string, ...args: T[]): void;
+  once<T = unknown>(event: string, callback: EventCallback<T>): void;
 }
 
 class EventBusImpl implements EventBus {
-  private events: Map<string, EventCallback[]>;
+  private events: Map<string, EventCallback<unknown>[]>;
 
   constructor() {
     this.events = new Map();
@@ -24,7 +24,7 @@ class EventBusImpl implements EventBus {
    * @param event 事件名称
    * @param callback 回调函数
    */
-  on(event: string, callback: EventCallback): void {
+  on<T = unknown>(event: string, callback: EventCallback<T>): void {
     if (!this.events.has(event)) {
       this.events.set(event, []);
     }
@@ -36,7 +36,7 @@ class EventBusImpl implements EventBus {
    * @param event 事件名称
    * @param callback 回调函数
    */
-  off(event: string, callback: EventCallback): void {
+  off<T = unknown>(event: string, callback: EventCallback<T>): void {
     if (!this.events.has(event)) return;
 
     const callbacks = this.events.get(event);
@@ -57,7 +57,7 @@ class EventBusImpl implements EventBus {
    * @param event 事件名称
    * @param args 参数
    */
-  emit(event: string, ...args: any[]): void {
+  emit<T = unknown>(event: string, ...args: T[]): void {
     if (!this.events.has(event)) return;
 
     const callbacks = this.events.get(event);
@@ -77,8 +77,8 @@ class EventBusImpl implements EventBus {
    * @param event 事件名称
    * @param callback 回调函数
    */
-  once(event: string, callback: EventCallback): void {
-    const onceCallback = (...args: any[]) => {
+  once<T = unknown>(event: string, callback: EventCallback<T>): void {
+    const onceCallback = (...args: T[]) => {
       callback(...args);
       this.off(event, onceCallback);
     };

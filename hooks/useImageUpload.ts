@@ -20,7 +20,7 @@ export interface UseImageUploadReturn {
   // 拖放区属性
   dropzoneProps: ReturnType<typeof useDropzone>['getRootProps'];
   // 拖放区输入属性
-  dropzoneInputProps: ReturnType<typeof useDropzone>['getInputProps'] extends (props?: any) => infer R ? R : never;
+  dropzoneInputProps: ReturnType<typeof useDropzone>['getInputProps'] extends (props?: Record<string, unknown>) => infer R ? R : never;
   // 拖放区是否处于活动状态
   isDragActive: boolean;
   // 上传单个文件
