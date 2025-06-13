@@ -37,7 +37,6 @@ const defaultOptions: UploadOptions = {
  */
 class UploadService {
   private baseUrl: string = 'https://image.vastsea.cc';
-  private apiUrl: string = '/api/upload';
 
   /**
    * 从File对象上传图片
