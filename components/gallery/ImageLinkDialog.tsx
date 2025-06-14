@@ -51,13 +51,13 @@ export default function ImageLinkDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle>图片链接</DialogTitle>
         </DialogHeader>
 
         {image && (
-          <div className="space-y-4">
+          <div className="w-full space-y-4 overflow-auto">
             {/* 图片预览 */}
             <div className="flex justify-center">
               <div className="w-32 h-32 overflow-hidden rounded border">
@@ -138,7 +138,7 @@ export default function ImageLinkDialog({
             <div className="space-y-1.5">
               <label className="text-sm font-medium">生成的链接</label>
               <div className="flex items-center gap-2">
-                <div className="flex-grow p-2 bg-muted rounded text-sm font-mono overflow-x-auto whitespace-nowrap">
+                <div className="flex-grow p-2 bg-muted rounded text-sm font-mono overflow-x-auto overscroll-none whitespace-nowrap" style={{'scrollbarWidth': 'none'}}>
                   {generatedLink}
                 </div>
                 <Button
