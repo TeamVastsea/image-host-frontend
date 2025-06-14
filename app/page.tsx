@@ -1,9 +1,12 @@
+'use client';
+
 import { Upload, Image as ImageIcon, Link2, Shield } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
+
   // 特性列表
   const features = [
     {

@@ -118,7 +118,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
               </DropdownMenu>
             ) : (
               <Button variant="default" size="sm" asChild>
-                <Link href="/auth/login">登录</Link>
+                <Link href="/login">登录</Link>
               </Button>
             )}
           </div>
@@ -126,7 +126,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       </header>
 
       {/* 主内容 */}
-      <main className="flex-grow container mx-auto px-4 py-6">
+      <main className="flex flex-col flex-grow container mx-auto px-4 py-6">
         {children}
       </main>
 
