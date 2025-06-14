@@ -126,7 +126,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       </header>
 
       {/* 主内容 */}
-      <main className="flex-grow container mx-auto px-4 py-6">
+      <main className="flex flex-col flex-grow container mx-auto px-4 py-6">
         {children}
       </main>
 
