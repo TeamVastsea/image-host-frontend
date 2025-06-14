@@ -1,17 +1,17 @@
 'use client';
 
-import { useAccount } from "@/hooks";
-import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect } from "react";
 import Cookie from 'js-cookie';
+import { useRouter } from "next/navigation"
+import { useEffect } from "react";
 
-const getHash = () => (typeof window !== 'undefined' ? decodeURIComponent(window.location.hash.replace('#', '')) : undefined);
+import { useAccount } from "@/hooks";
+
+// const getHash = () => (typeof window !== 'undefined' ? decodeURIComponent(window.location.hash.replace('#', '')) : undefined);
 
 export default function CallBack() {
     const router = useRouter();
-    const param = useSearchParams();
-    
-    const {accessToken, setAccessToken} = useAccount();
+
+    const { setAccessToken } = useAccount();
     useEffect(() => {
         const hash = window.location.hash.split('&');
         const token = hash[0].split('=')[1];
