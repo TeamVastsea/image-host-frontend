@@ -118,7 +118,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
               </DropdownMenu>
             ) : (
               <Button variant="default" size="sm" asChild>
-                <Link href="/auth/login">登录</Link>
+                <Link href="/login">登录</Link>
               </Button>
             )}
           </div>
