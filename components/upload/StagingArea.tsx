@@ -87,7 +87,7 @@ export default function StagingArea({ uploadOptions }: StagingAreaProps) {
 
       await uploadFiles(files, {
         ...uploadOptions,
-        metadata: { customNames }
+        metadata: { customNames: JSON.stringify(customNames) }
       });
     }
 
