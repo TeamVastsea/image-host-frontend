@@ -28,7 +28,7 @@ class EventBusImpl implements EventBus {
     if (!this.events.has(event)) {
       this.events.set(event, []);
     }
-    this.events.get(event)?.push(callback);
+    this.events.get(event)?.push(callback as EventCallback<unknown>);
   }
 
   /**
@@ -41,7 +41,7 @@ class EventBusImpl implements EventBus {
 
     const callbacks = this.events.get(event);
     if (callbacks) {
-      const index = callbacks.indexOf(callback);
+      const index = callbacks.indexOf(callback as EventCallback<unknown>);
       if (index !== -1) {
         callbacks.splice(index, 1);
       }
